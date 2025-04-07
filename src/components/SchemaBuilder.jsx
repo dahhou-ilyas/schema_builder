@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 const SchemaBuilder = ({ onSave, onCancel, existingSchemas = [] }) => {
   const [schemaName, setSchemaName] = useState('');
   const [fields, setFields] = useState([]);
+  const [error,setError]=useState("");
   const [relations, setRelations] = useState([]);
   const [currentField, setCurrentField] = useState({
     name: '',
@@ -31,8 +32,16 @@ const SchemaBuilder = ({ onSave, onCancel, existingSchemas = [] }) => {
   ];
 
   const addField = () => {
-    if (currentField.name.trim() === '') return;
-    
+    const trimmedName = currentField.name.trim();
+    if (trimmedName === '') return;
+
+    // Vérifie si un champ avec le même nom existe déjà
+    const nameExists = fields.some(field => field.name.trim().toLowerCase() === trimmedName.toLowerCase());
+    if (nameExists) {
+      setError("duplication field");
+      return
+    };
+
     setFields([...fields, { ...currentField, id: uuidv4() }]);
     setCurrentField({
       name: '',
@@ -182,6 +191,9 @@ const SchemaBuilder = ({ onSave, onCancel, existingSchemas = [] }) => {
           >
             Ajouter le champ
           </button>
+          {error && (
+            <div className='text-red-500'>{error}</div>
+          )}
         </div>
       </div>
       

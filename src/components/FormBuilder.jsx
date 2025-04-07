@@ -89,8 +89,8 @@ const FormBuilder = ({ schema, allSchemas, onSubmit, onCancel }) => {
           <div key={field.id} className="mb-4">
             <FormField
               field={field}
-              value={formData[field.id] || ''}
-              onChange={(value) => handleChange(field.id, value)}
+              value={formData[field.name] || ''}
+              onChange={(value) => handleChange(field.name, value)}
               error={errors[field.id]}
             />
           </div>

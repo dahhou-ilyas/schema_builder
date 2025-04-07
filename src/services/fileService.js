@@ -1,31 +1,41 @@
+const API_URL = 'http://localhost:3001/api';
+
 const fileService = {
   // Dans une application web, ces fonctions seraient remplacées par des appels API vers un serveur
   // Ce code simule la persistance en utilisant localStorage
   
-  readSchemas: () => {
-    try {
-      const schemas = localStorage.getItem('schemas');
-      return schemas ? JSON.parse(schemas) : [];
-    } catch (error) {
-      console.error('Erreur lors de la lecture des schémas:', error);
-      return [];
-    }
+  readSchemas: async () => {
+      try {
+        const response = await fetch(`${API_URL}/schemas`);
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des schémas');
+        }
+        const data = await response.json();
+        return data.schemas;
+      } catch (error) {
+        console.error('Erreur dans fetchSchemas:', error);
+        return [];
+      }
+    
   },
   
-  saveSchema: (schema) => {
+  saveSchema: async (schema) => {
     try {
-      const schemas = fileService.readSchemas();
-      // Vérifier si le schéma existe déjà (mise à jour)
-      const existingIndex = schemas.findIndex(s => s.id === schema.id);
       
-      if (existingIndex >= 0) {
-        schemas[existingIndex] = schema;
-      } else {
-        schemas.push(schema);
+      const response = await fetch(`${API_URL}/schemas`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(schema),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'enregistrement du schéma');
       }
-      
-      localStorage.setItem('schemas', JSON.stringify(schemas));
+        
       return true;
+
     } catch (error) {
       console.error('Erreur lors de la sauvegarde du schéma:', error);
       return false;
@@ -45,6 +55,7 @@ const fileService = {
   
   saveFormData: (schemaId, formData) => {
     try {
+      console.log(formData);
       // Générer un ID pour le formulaire s'il n'en a pas
       if (!formData.id) {
         formData.id = Math.random().toString(36).substring(2, 15);

@@ -7,12 +7,14 @@ import { readSchemas, saveSchema, saveFormData } from './services/fileService';
 const App = () => {
   const [schemas, setSchemas] = useState([]);
   const [currentSchema, setCurrentSchema] = useState(null);
-  const [mode, setMode] = useState('list'); // 'list', 'createSchema', 'fillForm'
+  const [mode, setMode] = useState('list');
 
   useEffect(() => {
-    // Charger les schémas existants au démarrage
-    const loadedSchemas = readSchemas();
-    setSchemas(loadedSchemas);
+    const data = async ()=>{
+      const loadedSchemas =await readSchemas();
+      setSchemas(loadedSchemas);
+    }
+    data()
   }, []);
 
   const handleCreateSchema = (schema) => {
