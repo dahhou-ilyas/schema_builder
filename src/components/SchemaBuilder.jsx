@@ -5,6 +5,7 @@ const SchemaBuilder = ({ onSave, onCancel, existingSchemas = [] }) => {
   const [schemaName, setSchemaName] = useState('');
   const [fields, setFields] = useState([]);
   const [error,setError]=useState("");
+  const [errorRelation,setErrorRelation]=useState("");
   const [relations, setRelations] = useState([]);
   const [currentField, setCurrentField] = useState({
     name: '',
@@ -58,6 +59,13 @@ const SchemaBuilder = ({ onSave, onCancel, existingSchemas = [] }) => {
   const addRelation = () => {
     if (currentRelation.name.trim() === '' || currentRelation.targetSchema === '') return;
     
+    const nameExists = relations.some(field => field.name.trim().toLowerCase() === currentRelation.name.toLowerCase());
+
+    if (nameExists) {
+      setErrorRelation("duplication field in relation");
+      return
+    };
+
     setRelations([...relations, { ...currentRelation, id: uuidv4() }]);
     setCurrentRelation({
       name: '',
@@ -283,6 +291,9 @@ const SchemaBuilder = ({ onSave, onCancel, existingSchemas = [] }) => {
             <p className="text-sm text-gray-500 mt-1">
               Créez d'abord d'autres schémas pour pouvoir définir des relations.
             </p>
+          )}
+          {errorRelation && (
+            <div className='text-red-500'>{errorRelation}</div>
           )}
         </div>
       </div>

@@ -50,7 +50,7 @@ const FormBuilder = ({ schema, allSchemas, onSubmit, onCancel }) => {
     // Valider les relations
     if (schema.relations) {
       schema.relations.forEach(relation => {
-        if (relation.required && !relationsData[relation.id]) {
+        if (relation.required && !relationsData[relation.name]) {
           newErrors[relation.id] = 'Cette relation est obligatoire';
           isValid = false;
         }
@@ -109,8 +109,8 @@ const FormBuilder = ({ schema, allSchemas, onSubmit, onCancel }) => {
                     relation={relation}
                     targetSchema={targetSchema}
                     allSchemas={allSchemas}
-                    value={relationsData[relation.id] || (relation.relationType.includes('Many') ? [] : '')}
-                    onChange={(value) => handleRelationChange(relation.id, value)}
+                    value={relationsData[relation.name] || (relation.relationType.includes('Many') ? [] : '')}
+                    onChange={(value) => handleRelationChange(relation.name, value)}
                     error={errors[relation.id]}
                   />
                 </div>
