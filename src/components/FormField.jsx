@@ -1,4 +1,6 @@
 import React from 'react';
+// j'ai besoin de fixer les nom de champe dans le json (dans les realtion c'est à dire les field de relation ) et aussi faire l'unicité
+//{schemaId: "311be5b3-904a-4103-ab8b-74ebed31bd64", schemaName: "sss", data: {def: "sasses"}, relations: {e08d75b4-bf10-4742-942e-8afc502cf3df: ["0i3fki3jsmta", "8k2xxjs7hri", "3qfmev29j78"]}, createdAt: "2025-04-08T09:54:10.957Z"}
 
 
 const FormField = ({ field, value, onChange, error }) => {
